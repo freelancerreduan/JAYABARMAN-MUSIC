@@ -49,7 +49,7 @@
             <input name="title" form="{{ $formId }}" class="input" value="{{ $group->title }}" aria-label="Group title" required style="height:38px;font-weight:600">
           </div>
           <span class="badge">{{ $group->images->count() }} photos</span>
-          @include('admin.partials.delete', ['action' => route('admin.portfolio.destroy', $group), 'confirm' => 'Delete the group "'.$group->title.'" and all its photos?', 'label' => 'Group'])
+          @include('admin.partials.delete', ['action' => route('admin.portfolio.destroy', $group), 'confirm' => 'Delete the group "'.$group->title.'" and all its photos?', 'btnLabel' => 'Group'])
         </div>
 
         <div class="card-body">

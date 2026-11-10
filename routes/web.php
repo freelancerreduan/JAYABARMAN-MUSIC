@@ -78,6 +78,7 @@ Route::prefix('admin')->name('admin.')->middleware('auth')->group(function () {
     Route::controller(Admin\AboutController::class)->group(function () {
         Route::get('about', 'index')->name('about');
         Route::put('about/photo', 'savePhoto')->name('about.photo');
+        Route::put('about/details', 'saveDetails')->name('about.details');
         Route::get('about/blocks/create', 'create')->name('about.create');
         Route::post('about/blocks', 'store')->name('about.store');
         Route::get('about/blocks/{block}/edit', 'edit')->name('about.edit');

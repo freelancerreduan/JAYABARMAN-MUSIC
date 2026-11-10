@@ -102,14 +102,14 @@ class MusicController extends Controller
         $video = new MusicVideo(['sort' => (MusicVideo::max('sort') ?? 0) + 1]);
         $this->fillVideo($request, $video);
 
-        return redirect()->route('admin.music', ['#videos'])->with('success', 'Video added.');
+        return redirect()->to(route('admin.music').'#videos')->with('success', 'Video added.');
     }
 
     public function updateVideo(Request $request, MusicVideo $video)
     {
         $this->fillVideo($request, $video);
 
-        return redirect()->route('admin.music', ['#videos'])->with('success', 'Video saved.');
+        return redirect()->to(route('admin.music').'#videos')->with('success', 'Video saved.');
     }
 
     public function destroyVideo(MusicVideo $video)

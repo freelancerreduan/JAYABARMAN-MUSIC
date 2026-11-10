@@ -1,13 +1,12 @@
-// Jaya Barman admin: drag-and-drop order, upload boxes, video source switch, text editor
+// Jaya Barman admin: drag-and-drop order, upload boxes, video source switch, text editor.
+// Everything that belongs to one page is set up again after each Turbo page change.
 (function () {
   "use strict";
 
-  const csrf = document.querySelector('meta[name="csrf-token"]').content;
-  const sortUrl = document.querySelector('meta[name="sort-url"]').content;
-  const toast = document.getElementById("saveToast");
   let toastTimer;
 
   function showToast(text, isError) {
+    const toast = document.getElementById("saveToast");
     if (!toast) return;
     toast.querySelector("span").textContent = text;
     toast.classList.toggle("error", !!isError);
@@ -28,17 +27,23 @@
       if (no) no.textContent = i + 1;
     });
     if (!ids.length) return Promise.resolve();
-    return fetch(sortUrl, {
+    return fetch(document.querySelector('meta[name="sort-url"]').content, {
       method: "POST",
-      headers: { "Content-Type": "application/json", "X-CSRF-TOKEN": csrf, Accept: "application/json" },
+      headers: {
+        "Content-Type": "application/json",
+        "X-CSRF-TOKEN": document.querySelector('meta[name="csrf-token"]').content,
+        Accept: "application/json",
+      },
       body: JSON.stringify(body),
     }).then((r) => {
       if (!r.ok) throw new Error();
     });
   }
 
-  if (window.Sortable) {
+  function initSortable() {
+    if (!window.Sortable) return;
     document.querySelectorAll("[data-sortable]").forEach((list) => {
+      if (Sortable.get(list)) return;
       Sortable.create(list, {
         animation: 160,
         handle: list.dataset.handle || null,
@@ -55,80 +60,98 @@
           Promise.all(lists.map(saveOrder))
             .then(() => showToast("Order saved"))
             .catch(() => showToast("Could not save the order. Reload and try again.", true));
-          lists.forEach((l) => l.closest("[data-empty-wrap]")?.classList.toggle("is-empty", !l.querySelector("[data-id]")));
+          lists.forEach((l) => l.classList.toggle("is-empty", !l.querySelector("[data-id]")));
         },
       });
     });
   }
 
   // ---------- Upload boxes: drag files in or click; shows what was picked ----------
-  document.querySelectorAll(".dropzone").forEach((zone) => {
-    const input = zone.querySelector("input[type=file]");
-    const list = zone.parentElement.querySelector(".drop-picked");
-    ["dragenter", "dragover"].forEach((ev) => zone.addEventListener(ev, () => zone.classList.add("over")));
-    ["dragleave", "drop"].forEach((ev) => zone.addEventListener(ev, () => zone.classList.remove("over")));
+  function initDropzones() {
+    document.querySelectorAll(".dropzone:not([data-ready])").forEach((zone) => {
+      zone.dataset.ready = "1";
+      const input = zone.querySelector("input[type=file]");
+      const list = zone.parentElement.querySelector(".drop-picked");
+      ["dragenter", "dragover"].forEach((ev) => zone.addEventListener(ev, () => zone.classList.add("over")));
+      ["dragleave", "drop"].forEach((ev) => zone.addEventListener(ev, () => zone.classList.remove("over")));
 
-    input.addEventListener("change", () => {
-      if (!list) return;
-      list.innerHTML = "";
-      const files = [...input.files];
-      zone.classList.toggle("has-files", files.length > 0);
-      zone.querySelector(".dz-count").textContent = files.length
-        ? files.length + (files.length === 1 ? " file chosen" : " files chosen")
-        : "";
-      files.forEach((f) => {
-        const item = document.createElement("div");
-        item.className = "picked";
-        if (f.type.startsWith("image/")) {
-          const img = document.createElement("img");
-          img.src = URL.createObjectURL(f);
-          item.appendChild(img);
-        } else {
-          item.innerHTML = '<i class="bi ' + (f.type.startsWith("video/") ? "bi-film" : "bi-music-note") + '"></i>';
-          const name = document.createElement("span");
-          name.textContent = f.name;
-          item.appendChild(name);
-          item.classList.add("file");
-        }
-        list.appendChild(item);
+      input.addEventListener("change", () => {
+        if (!list) return;
+        list.innerHTML = "";
+        const files = [...input.files];
+        zone.classList.toggle("has-files", files.length > 0);
+        zone.querySelector(".dz-count").textContent = files.length
+          ? files.length + (files.length === 1 ? " file chosen" : " files chosen")
+          : "";
+        files.forEach((f) => {
+          const item = document.createElement("div");
+          item.className = "picked";
+          if (f.type.startsWith("image/")) {
+            const img = document.createElement("img");
+            img.src = URL.createObjectURL(f);
+            item.appendChild(img);
+          } else {
+            item.innerHTML = '<i class="bi ' + (f.type.startsWith("video/") ? "bi-film" : "bi-music-note") + '"></i>';
+            const name = document.createElement("span");
+            name.textContent = f.name;
+            item.appendChild(name);
+            item.classList.add("file");
+          }
+          list.appendChild(item);
+        });
       });
     });
-  });
-
-  // ---------- Show the button only when a form has new files ----------
-  document.querySelectorAll("form[data-busy]").forEach((form) =>
-    form.addEventListener("submit", () => {
-      const btn = form.querySelector("[type=submit]") || (form.id && document.querySelector('[type=submit][form="' + form.id + '"]'));
-      if (btn) {
-        btn.disabled = true;
-        btn.innerHTML = '<span class="spinner-border spinner-border-sm"></span> ' + (form.dataset.busy || "Saving…");
-      }
-    })
-  );
+  }
 
   // ---------- Video source: YouTube link or uploaded file ----------
-  document.querySelectorAll("[data-type-switch]").forEach((box) => {
-    const panels = box.querySelectorAll("[data-when]");
-    const pick = (v) => panels.forEach((p) => { p.hidden = p.dataset.when !== v; });
-    box.querySelectorAll("input[type=radio]").forEach((r) => {
-      r.addEventListener("change", () => pick(r.value));
-      if (r.checked) pick(r.value);
+  function initTypeSwitch() {
+    document.querySelectorAll("[data-type-switch]").forEach((box) => {
+      const panels = box.querySelectorAll("[data-when]");
+      const pick = (v) => panels.forEach((p) => { p.hidden = p.dataset.when !== v; });
+      box.querySelectorAll("input[type=radio]").forEach((r) => {
+        r.addEventListener("change", () => pick(r.value));
+        if (r.checked) pick(r.value);
+      });
     });
-  });
+  }
 
   // ---------- Simple text editor (bold, italic, link, lists) ----------
-  if (window.Quill) {
-    document.querySelectorAll("[data-editor]").forEach((el) => {
+  function initEditors() {
+    if (!window.Quill) return;
+    document.querySelectorAll("[data-editor]:not([data-ready])").forEach((el) => {
+      el.dataset.ready = "1";
       const field = document.getElementById(el.dataset.editor);
       const q = new Quill(el, {
         theme: "snow",
         modules: { toolbar: [["bold", "italic", "underline"], ["link"], [{ list: "ordered" }, { list: "bullet" }], ["clean"]] },
         placeholder: el.dataset.placeholder || "",
       });
+      // copy the editor text into the form field before it is sent
       el.closest("form").addEventListener("submit", () => {
         const html = q.root.innerHTML;
         field.value = html === "<p><br></p>" ? "" : html;
-      });
+      }, true);
     });
   }
+
+  // ---------- Buttons show "Saving…" while a form is being sent ----------
+  function busy(form) {
+    const btn = form.querySelector("[type=submit]") || (form.id && document.querySelector('[type=submit][form="' + form.id + '"]'));
+    if (btn && form.dataset.busy) {
+      btn.disabled = true;
+      btn.innerHTML = '<span class="spinner-border spinner-border-sm"></span> ' + form.dataset.busy;
+    }
+  }
+  if (window.Turbo) document.addEventListener("turbo:submit-start", (e) => busy(e.target));
+  else document.addEventListener("submit", (e) => busy(e.target));
+
+  function init() {
+    initSortable();
+    initDropzones();
+    initTypeSwitch();
+    initEditors();
+  }
+
+  if (window.Turbo) document.addEventListener("turbo:load", init);
+  else document.addEventListener("DOMContentLoaded", init);
 })();

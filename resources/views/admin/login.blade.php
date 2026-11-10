@@ -4,6 +4,8 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Sign in · Jaya Barman Admin</title>
+  {{-- Login and logout always load the full page --}}
+  <meta name="turbo-visit-control" content="reload">
   <script>try { if (localStorage.getItem("admin-theme") === "dark") document.documentElement.dataset.theme = "dark"; } catch (e) {}</script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -22,7 +24,7 @@
     </div>
 
     <div class="auth-form">
-      <form class="auth-card" method="POST" action="{{ route('login') }}">
+      <form class="auth-card" method="POST" action="{{ route('login') }}" data-turbo="false">
         @csrf
         <h1>Welcome back</h1>
         <p>Sign in to the admin panel.</p>

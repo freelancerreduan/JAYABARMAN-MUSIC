@@ -24,13 +24,18 @@ class DatabaseSeeder extends Seeder
             }
         }
 
-        Setting::put([
+        // Only fills settings that are not saved yet, so running the seeder again keeps the admin's changes
+        Setting::putMissing([
             'hero_image' => 'assets/img/hero.jpg',
             'hero_name' => 'Jaya Barman',
             'hero_tagline' => '…spirit <b>U</b> all…',
             'home_title' => 'Musician',
             'home_text' => '<p>Jaya Barman is a distinguished visual artist, actor, and professional musician, with a Master of Fine Arts degree from the University of Dhaka. Jaya currently serves as the lead member of <a href="http://www.jolergaan.com" target="_blank" rel="noopener">Joler Gaan</a>, a musical group based in Dhaka, Bangladesh, while also engaging in television, film, and stage productions. Jaya is also a lead actor and musician with <a href="http://www.prachyanat.com" target="_blank" rel="noopener">Prachyanat</a>, a prominent theater group recognized for its impactful social commentary. Jaya identifies as a child of the soil, drawing inspiration from the rivers that cleanse and carry the gentle, soothing symphonies of nature. On contemplative nights, dreams navigate like a boat across these fertile lands, fueled by a profound curiosity regarding the melodies of the natural world. Jaya is particularly passionate about composing songs, designing innovative musical instruments, and delving into digital film and multimedia art. Jaya has participated in various residency programs across the UK, Germany, Sri Lanka, Japan, India, South Korea, Nepal, Vietnam, Egypt, and Brazil. Over the years, Jaya has collaborated on numerous projects with esteemed artists and organizations, including Colin Blakey from the UK, Farzo Abaji from France, Amy Trumppetar from the USA, Sacatar Foundation from Brazil, Jerome Philip Kavanagh and Komako-Aroha Silva from New Zealand, and Max Vandervorst from Belgium. Jaya firmly believes in the transformative power of art and its capacity to forge connections among diverse cultures and experiences. Through this work, Jaya aspires to inspire others to discover their own voices and articulate their unique narratives. Everyone is invited to join this artistic journey to explore the beauty of creativity together.</p>',
             'about_photo' => 'assets/img/portrait.jpg',
+            'about_details_title' => 'Personal Details',
+            'about_name' => 'JAYA BARMAN',
+            'about_role' => 'Actor, Musician',
+            'about_email' => 'tukuli17@gmail.com',
             'contact_image' => 'assets/img/jaya-live.jpg',
             'contact_title' => 'Get in Touch',
             'contact_location' => 'Paris, France',
@@ -120,7 +125,6 @@ class DatabaseSeeder extends Seeder
 
         $ul = fn (array $items) => '<ul>'.implode('', array_map(fn ($x) => '<li>'.$x.'</li>', $items)).'</ul>';
         $blocks = [
-            ['right', 'Personal Details', '<p>Name: <b>JAYA BARMAN</b><br>Actor, Musician</p><p>E-Mail: <b>tukuli17@gmail.com</b></p>'],
             ['right', 'Current Status', '<p><b>Founder Member</b><br>Prachyanat (Theatre Group)<br><a href="http://www.prachyanat.com" target="_blank" rel="noopener">www.prachyanat.com</a></p><p><b>Team Leader</b><br>Joler Gaan (Musical troupe)<br><a href="http://www.jolergaan.com" target="_blank" rel="noopener">www.jolergaan.com</a></p><p><b>Trustee</b><br>Crack International Art camp<br><a href="http://www.crackbd.org" target="_blank" rel="noopener">www.crackbd.org</a></p><p><b>Associate</b><br>Edinburgh Mela Ltd.<br>Melange Network UK<br>Banglascot Foundation<br>PANDAL (Festival Organizer)</p>'],
             ['left', 'Work Experience', '<p>2008-2010: Creative Director, Dhansiri communication ltd, Bangladesh</p>'],
             ['left', 'Residency Program', $ul([

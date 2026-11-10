@@ -27,7 +27,47 @@
     </div>
   </div>
 
-  <div class="help"><i class="bi bi-arrows-move"></i><div>Drag a block up or down, or into the other column. The page changes the same way.</div></div>
+  {{-- Personal Details: plain boxes; an empty box hides that line --}}
+  <form method="POST" action="{{ route('admin.about.details') }}" class="card mb-4" data-busy="Saving…">
+    @csrf
+    @method('PUT')
+    <div class="card-head"><div><h3><i class="bi bi-person-badge text-primary"></i> Personal Details</h3><p>First block in the right column. Leave a box empty to hide that line.</p></div></div>
+    <div class="card-body form-grid">
+      <div class="field">
+        <label for="d_title">Heading</label>
+        <input id="d_title" name="about_details_title" class="input" value="{{ old('about_details_title', setting('about_details_title', 'Personal Details')) }}" required>
+      </div>
+      <div class="field">
+        <label for="d_name">Name</label>
+        <input id="d_name" name="about_name" class="input" value="{{ old('about_name', setting('about_name')) }}" placeholder="JAYA BARMAN">
+      </div>
+      <div class="field">
+        <label for="d_role">Work / role</label>
+        <input id="d_role" name="about_role" class="input" value="{{ old('about_role', setting('about_role')) }}" placeholder="Actor, Musician">
+      </div>
+      <div class="field">
+        <label for="d_email">E-mail</label>
+        <input id="d_email" name="about_email" type="email" @class(['input', 'is-invalid' => $errors->has('about_email')]) value="{{ old('about_email', setting('about_email')) }}">
+        @error('about_email')<div class="error">{{ $message }}</div>@enderror
+      </div>
+      <div class="field">
+        <label for="d_phone">Phone <span class="form-label-sm">(optional)</span></label>
+        <input id="d_phone" name="about_phone" class="input" value="{{ old('about_phone', setting('about_phone')) }}">
+      </div>
+      <div class="field">
+        <label for="d_loc">Location <span class="form-label-sm">(optional)</span></label>
+        <input id="d_loc" name="about_location" class="input" value="{{ old('about_location', setting('about_location')) }}" placeholder="Paris, France">
+      </div>
+      <div class="field full">
+        <label for="d_extra">More lines <span class="form-label-sm">(optional)</span></label>
+        <textarea id="d_extra" name="about_extra" class="textarea" rows="3" placeholder="One per line, e.g.&#10;Nationality: Bangladeshi&#10;Languages: Bangla, English, French">{{ old('about_extra', setting('about_extra')) }}</textarea>
+        <div class="hint">One line each. Write “Label: value” and the value is shown in bold.</div>
+      </div>
+    </div>
+    <div class="card-foot"><button class="btn btn-primary" type="submit"><i class="bi bi-check2"></i>Save Personal Details</button></div>
+  </form>
+
+  <div class="help"><i class="bi bi-arrows-move"></i><div>Other blocks: drag a block up or down, or into the other column. The page changes the same way.</div></div>
 
   <div class="about-cols">
     @foreach (['left' => $left, 'right' => $right] as $side => $blocks)

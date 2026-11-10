@@ -4,12 +4,6 @@
 @section('subtitle', 'About Me page')
 @section('view_url', route('about'))
 
-@push('head')
-  <link href="https://cdn.jsdelivr.net/npm/quill@1.3.7/dist/quill.snow.css" rel="stylesheet">
-@endpush
-@push('scripts')
-  <script src="https://cdn.jsdelivr.net/npm/quill@1.3.7/dist/quill.min.js"></script>
-@endpush
 
 @section('content')
   <form method="POST" action="{{ $block->exists ? route('admin.about.update', $block) : route('admin.about.store') }}" class="card" style="max-width:860px">

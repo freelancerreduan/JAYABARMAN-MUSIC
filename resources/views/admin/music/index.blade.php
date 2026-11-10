@@ -43,7 +43,7 @@
             <button class="btn btn-sm" type="submit" title="Save name"><i class="bi bi-check2"></i>Save</button>
           </form>
           <span class="badge">{{ $album->tracks->count() }} songs</span>
-          @include('admin.partials.delete', ['action' => route('admin.albums.destroy', $album), 'confirm' => 'Delete the album "'.$album->title.'" and all its songs?', 'label' => 'Album'])
+          @include('admin.partials.delete', ['action' => route('admin.albums.destroy', $album), 'confirm' => 'Delete the album "'.$album->title.'" and all its songs?', 'btnLabel' => 'Album'])
         </div>
 
         <ul class="sort-rows" data-sortable="tracks" data-handle=".drag-handle">

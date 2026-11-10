@@ -30,6 +30,23 @@ class AboutController extends Controller
         return back()->with('success', 'Photo changed.');
     }
 
+    /** "Personal Details" at the top of the right column: simple boxes, no editor. */
+    public function saveDetails(Request $request)
+    {
+        $data = $request->validate([
+            'about_details_title' => 'required|string|max:120',
+            'about_name' => 'nullable|string|max:150',
+            'about_role' => 'nullable|string|max:200',
+            'about_email' => 'nullable|email|max:200',
+            'about_phone' => 'nullable|string|max:60',
+            'about_location' => 'nullable|string|max:150',
+            'about_extra' => 'nullable|string|max:2000',
+        ]);
+        Setting::put($data);
+
+        return back()->with('success', 'Personal Details saved.');
+    }
+
     public function create(Request $request)
     {
         return view('admin.about.form', ['block' => new AboutBlock(['side' => $request->query('side') === 'right' ? 'right' : 'left'])]);

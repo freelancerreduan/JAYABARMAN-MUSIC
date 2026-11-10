@@ -26,6 +26,15 @@ class Setting extends Model
         return ($value === null || $value === '') ? $default : $value;
     }
 
+    /** Saves only the keys that do not exist yet (used by the seeder). */
+    public static function putMissing(array $values): void
+    {
+        foreach ($values as $key => $value) {
+            self::firstOrCreate(['key' => $key], ['value' => $value]);
+        }
+        self::$cache = null;
+    }
+
     public static function put(array $values): void
     {
         foreach ($values as $key => $value) {

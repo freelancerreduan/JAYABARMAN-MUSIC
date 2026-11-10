@@ -196,3 +196,6 @@
   .page-head h2 { font-size: 22px; }
   .form-grid { grid-template-columns: 1fr; }
 }
+
+/* Loading bar while the next page loads (Turbo) */
+.turbo-progress-bar { height: 3px; background: var(--primary); box-shadow: 0 0 8px color-mix(in srgb, var(--primary) 60%, transparent); }

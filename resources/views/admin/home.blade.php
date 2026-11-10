@@ -4,12 +4,6 @@
 @section('subtitle', 'Top photo and the text under it')
 @section('view_url', route('home'))
 
-@push('head')
-  <link href="https://cdn.jsdelivr.net/npm/quill@1.3.7/dist/quill.snow.css" rel="stylesheet">
-@endpush
-@push('scripts')
-  <script src="https://cdn.jsdelivr.net/npm/quill@1.3.7/dist/quill.min.js"></script>
-@endpush
 
 @section('content')
   <form method="POST" action="{{ route('admin.home') }}" enctype="multipart/form-data" data-busy="Saving…">

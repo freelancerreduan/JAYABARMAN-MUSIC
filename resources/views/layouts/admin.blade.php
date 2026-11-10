@@ -30,8 +30,18 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Bebas+Neue&family=Tiro+Bangla&display=swap" rel="stylesheet">
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
   <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css" rel="stylesheet">
-  <link href="{{ asset('admin-assets/admin.css') }}?v={{ filemtime(public_path('admin-assets/admin.css')) }}" rel="stylesheet">
-  <link href="{{ asset('admin-assets/admin-extra.css') }}?v={{ filemtime(public_path('admin-assets/admin-extra.css')) }}" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/quill@1.3.7/dist/quill.snow.css" rel="stylesheet">
+  <link href="{{ asset('admin-assets/admin.css') }}?v={{ filemtime(public_path('admin-assets/admin.css')) }}" rel="stylesheet" data-turbo-track="reload">
+  <link href="{{ asset('admin-assets/admin-extra.css') }}?v={{ filemtime(public_path('admin-assets/admin-extra.css')) }}" rel="stylesheet" data-turbo-track="reload">
+
+  {{-- Turbo: pages and forms load in the background, only the page body is swapped --}}
+  <meta name="turbo-cache-control" content="no-cache">
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" defer></script>
+  <script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.6/Sortable.min.js" defer></script>
+  <script src="https://cdn.jsdelivr.net/npm/quill@1.3.7/dist/quill.min.js" defer></script>
+  <script src="https://cdn.jsdelivr.net/npm/@hotwired/turbo@8.0.12/dist/turbo.es2017-umd.js" defer></script>
+  <script src="{{ asset('admin-assets/admin.js') }}?v={{ filemtime(public_path('admin-assets/admin.js')) }}" defer data-turbo-track="reload"></script>
+  <script src="{{ asset('admin-assets/admin-extra.js') }}?v={{ filemtime(public_path('admin-assets/admin-extra.js')) }}" defer data-turbo-track="reload"></script>
   @stack('head')
 </head>
 <body>
@@ -119,10 +129,5 @@
 
 <div class="save-toast" id="saveToast" role="status" aria-live="polite"><i class="bi bi-check-circle-fill"></i><span>Order saved</span></div>
 
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.6/Sortable.min.js"></script>
-@stack('scripts')
-<script src="{{ asset('admin-assets/admin.js') }}?v={{ filemtime(public_path('admin-assets/admin.js')) }}"></script>
-<script src="{{ asset('admin-assets/admin-extra.js') }}?v={{ filemtime(public_path('admin-assets/admin-extra.js')) }}"></script>
 </body>
 </html>

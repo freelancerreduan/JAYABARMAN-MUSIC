@@ -2,6 +2,12 @@
 
 Laravel 13 + Bootstrap 5.3. The website looks the same as the static version (`jaiyabarman Updated 2026`), and everything on it is edited from the admin panel.
 
+## Run on port 3000 (fast)
+```
+node dev-server.cjs
+```
+Opens http://localhost:3000 (admin: /admin). Node sends photos and videos itself (many at once, video seeking) and passes the pages to `php artisan serve` on port 3001. Pages and admin forms load with Turbo, so the page changes without a full reload and shows a thin loading bar.
+
 ## Open on Laragon
 - Website: http://localhost/jayabarman-music/public/
 - Admin: http://localhost/jayabarman-music/public/admin
@@ -22,7 +28,7 @@ Each user changes their own email and password in **Footer links & login**.
 | Music | Albums → upload songs (name + audio file, many at once). Music Video → YouTube link **or** uploaded video file |
 | Visual Art / Theatre | Upload many photos at once, delete |
 | Portfolio | Groups: title + many photos. Colours alternate on the site: 1st grey, 2nd white, 3rd grey… |
-| About Me | Photo + text blocks; each block goes in the left or right column |
+| About Me | Photo; Personal Details (simple boxes: name, role, e-mail, phone, location, more lines); text blocks, each in the left or right column |
 | Contacts | Photo, heading, location, WhatsApp, e-mail |
 | Footer links & login | Social icons in the footer, your login email and password |
 

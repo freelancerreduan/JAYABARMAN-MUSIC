@@ -54,7 +54,7 @@
                     @if ($video->isYoutube())
                         <img src="{{ $video->thumbnail() }}" alt="" loading="lazy">
                     @else
-                        <video src="{{ media($video->source) }}#t=8" preload="metadata" muted playsinline tabindex="-1"></video>
+                        <video data-src="{{ media($video->source) }}#t=8" preload="none" muted playsinline tabindex="-1"></video>
                     @endif
                     <span class="tile-title">{{ $video->title }}@if ($video->subtitle)<small>{{ $video->subtitle }}</small>@endif</span>
                     <span class="play-badge"><i class="bi bi-play-fill"></i></span>
