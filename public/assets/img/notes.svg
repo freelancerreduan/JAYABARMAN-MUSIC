@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="720" height="320" viewBox="0 0 720 320" fill="none" stroke="#ffffff" stroke-opacity=".07" stroke-width="1.4">
+  <!-- staff lines -->
+  <g>
+    <path d="M-10 150 C120 70 240 210 380 140 S600 60 730 120"/>
+    <path d="M-10 160 C120 80 240 220 380 150 S600 70 730 130"/>
+    <path d="M-10 170 C120 90 240 230 380 160 S600 80 730 140"/>
+    <path d="M-10 180 C120 100 240 240 380 170 S600 90 730 150"/>
+    <path d="M-10 190 C120 110 240 250 380 180 S600 100 730 160"/>
+  </g>
+  <!-- notes -->
+  <g fill="#ffffff" fill-opacity=".07">
+    <ellipse cx="80" cy="128" rx="7" ry="5" transform="rotate(-20 80 128)"/>
+    <path d="M86 126 V88"/>
+    <ellipse cx="170" cy="152" rx="7" ry="5" transform="rotate(-20 170 152)"/>
+    <ellipse cx="200" cy="168" rx="7" ry="5" transform="rotate(-20 200 168)"/>
+    <path d="M176 150 V112 L206 124 V166"/>
+    <ellipse cx="310" cy="170" rx="7" ry="5" transform="rotate(-20 310 170)"/>
+    <path d="M316 168 V128 C326 136 332 142 328 152"/>
+    <ellipse cx="470" cy="104" rx="7" ry="5" transform="rotate(-20 470 104)"/>
+    <ellipse cx="500" cy="96" rx="7" ry="5" transform="rotate(-20 500 96)"/>
+    <path d="M476 102 V64 L506 56 V94"/>
+    <path d="M476 72 L506 64"/>
+    <ellipse cx="620" cy="112" rx="7" ry="5" transform="rotate(-20 620 112)"/>
+    <path d="M626 110 V72"/>
+  </g>
+</svg>
