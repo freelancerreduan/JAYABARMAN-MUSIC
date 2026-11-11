@@ -1,0 +1,7 @@
+---
+deployment:
+  tasks:
+    # Install PHP dependencies on the server (no composer upload needed) and make the
+    # runtime folders writable. The web docroot points at this folder's /public.
+    - '/bin/bash -lc "cd /home/jayavbqa/repositories/JAYABARMAN-MUSIC && COMPOSER_MEMORY_LIMIT=-1 composer install --no-dev --optimize-autoloader --no-interaction"'
+    - '/bin/bash -lc "cd /home/jayavbqa/repositories/JAYABARMAN-MUSIC && mkdir -p storage/framework/cache/data storage/framework/sessions storage/framework/views storage/app/.sysconf storage/framework/.license bootstrap/cache && chmod -R 775 storage bootstrap/cache"'
