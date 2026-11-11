@@ -24,6 +24,13 @@ class DatabaseSeeder extends Seeder
             }
         }
 
+        // On first install the setup page can choose the client's admin email and password.
+        $adminEmail = getenv('ADMIN_EMAIL') ?: ($_SERVER['ADMIN_EMAIL'] ?? '');
+        $adminPassword = getenv('ADMIN_PASSWORD') ?: ($_SERVER['ADMIN_PASSWORD'] ?? '');
+        if ($adminEmail && $adminPassword && ! User::where('email', $adminEmail)->exists()) {
+            User::create(['name' => 'Admin', 'email' => $adminEmail, 'password' => $adminPassword]);
+        }
+
         // Only fills settings that are not saved yet, so running the seeder again keeps the admin's changes
         Setting::putMissing([
             'hero_image' => 'assets/img/hero.jpg',

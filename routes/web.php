@@ -48,6 +48,7 @@ Route::prefix('admin')->name('admin.')->middleware('auth')->group(function () {
     Route::controller(Admin\MusicController::class)->group(function () {
         Route::get('music', 'index')->name('music');
         Route::post('albums', 'storeAlbum')->name('albums.store');
+        Route::get('albums/{album}', 'editAlbum')->name('albums.edit');
         Route::put('albums/{album}', 'updateAlbum')->name('albums.update');
         Route::delete('albums/{album}', 'destroyAlbum')->name('albums.destroy');
         Route::post('albums/{album}/tracks', 'storeTracks')->name('tracks.store');

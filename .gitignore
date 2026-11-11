@@ -29,3 +29,9 @@ Thumbs.db
 # Files uploaded from the admin panel
 /public/uploads/*
 !/public/uploads/.gitkeep
+
+# License system: the activated state and install marker are per-copy (never commit them,
+# so a fresh clone starts unlicensed and asks for a key / developer name).
+/storage/app/.sysconf
+/storage/framework/.license
+/bootstrap/cache/.sysmeta

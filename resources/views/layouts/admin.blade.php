@@ -10,7 +10,7 @@
         ['admin.contacts', 'envelope-paper', 'Contacts', 'contacts'],
     ];
     $isActive = function ($p) {
-        if (! request()->routeIs($p[0], $p[0].'.*', $p[0] === 'admin.music' ? 'admin.videos.*' : '__none', $p[0] === 'admin.about' ? 'admin.about.*' : '__none')) {
+        if (! request()->routeIs($p[0], $p[0].'.*', $p[0] === 'admin.music' ? 'admin.videos.*' : '__none', $p[0] === 'admin.music' ? 'admin.albums.*' : '__none', $p[0] === 'admin.about' ? 'admin.about.*' : '__none')) {
             return false;
         }
         return ! isset($p[4]) || request()->route('section') === $p[4]['section'];

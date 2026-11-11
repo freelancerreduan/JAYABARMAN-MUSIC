@@ -23,9 +23,16 @@ class MusicController extends Controller
     public function storeAlbum(Request $request)
     {
         $data = $request->validate(['title' => 'required|string|max:200']);
-        Album::create($data + ['sort' => (Album::max('sort') ?? 0) + 1]);
+        $album = Album::create($data + ['sort' => (Album::max('sort') ?? 0) + 1]);
 
-        return back()->with('success', 'Album added. Now upload its songs.');
+        return redirect()->route('admin.albums.edit', $album)->with('success', 'Album added. Now upload its songs.');
+    }
+
+    public function editAlbum(Album $album)
+    {
+        $album->load('tracks');
+
+        return view('admin.music.album', compact('album'));
     }
 
     public function updateAlbum(Request $request, Album $album)
@@ -42,7 +49,7 @@ class MusicController extends Controller
         }
         $album->delete();
 
-        return back()->with('success', 'Album and its songs deleted.');
+        return redirect()->route('admin.music')->with('success', 'Album and its songs deleted.');
     }
 
     // ---------- Songs (audio) ----------

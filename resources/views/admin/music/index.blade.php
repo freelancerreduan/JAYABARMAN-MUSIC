@@ -9,80 +9,43 @@
   <div class="page-head">
     <div>
       <h2>Albums</h2>
-      <p>Each album is one player on the Music page. Add songs to an album by uploading audio files.</p>
+      <p>Each album is one player on the Music page. Open an album to add, rename or remove its songs.</p>
     </div>
+    <form method="POST" action="{{ route('admin.albums.store') }}" class="actions album-new">
+      @csrf
+      <input name="title" class="input" placeholder="New album name" aria-label="New album name" required>
+      <button class="btn btn-primary" type="submit"><i class="bi bi-plus-lg"></i>Add album</button>
+    </form>
   </div>
 
-  <form method="POST" action="{{ route('admin.albums.store') }}" class="card mb-4">
-    @csrf
-    <div class="card-body d-flex flex-wrap gap-2 align-items-end">
-      <div class="field flex-grow-1" style="min-width:220px">
-        <label for="new_album">New album name</label>
-        <input id="new_album" name="title" class="input" placeholder="e.g. Bengali Folk" required>
-      </div>
-      <button class="btn btn-primary" type="submit"><i class="bi bi-plus-lg"></i>Add album</button>
-    </div>
-  </form>
-
-  @if ($albums->isEmpty())
-    <div class="card"><div class="empty"><i class="bi bi-vinyl"></i>No albums yet. Add one above.</div></div>
-  @else
-    <div class="help"><i class="bi bi-arrows-move"></i><div>Drag <i class="bi bi-grip-vertical"></i> to change the order of albums or songs. It is saved right away.</div></div>
-  @endif
-
-  <div data-sortable="albums" data-handle=".album-handle">
-    @foreach ($albums as $album)
-      <div class="card album-card" data-id="{{ $album->id }}">
-        <div class="card-head">
-          <span class="drag-handle album-handle" title="Drag to move"><i class="bi bi-grip-vertical"></i></span>
-          <form method="POST" action="{{ route('admin.albums.update', $album) }}" class="album-name">
-            @csrf
-            @method('PUT')
-            <i class="bi bi-vinyl text-secondary"></i>
-            <input name="title" class="input" value="{{ $album->title }}" aria-label="Album name" required>
-            <button class="btn btn-sm" type="submit" title="Save name"><i class="bi bi-check2"></i>Save</button>
-          </form>
-          <span class="badge">{{ $album->tracks->count() }} songs</span>
-          @include('admin.partials.delete', ['action' => route('admin.albums.destroy', $album), 'confirm' => 'Delete the album "'.$album->title.'" and all its songs?', 'btnLabel' => 'Album'])
-        </div>
-
-        <ul class="sort-rows" data-sortable="tracks" data-handle=".drag-handle">
-          @forelse ($album->tracks as $track)
-            <li class="sort-row" data-id="{{ $track->id }}">
-              <span class="drag-handle" title="Drag to move"><i class="bi bi-grip-vertical"></i></span>
+  <div class="card mb-2">
+    @if ($albums->isEmpty())
+      <div class="empty"><i class="bi bi-vinyl"></i>No albums yet. Type a name above and press Add album.</div>
+    @else
+      <div class="card-body">
+        <div class="sort-grid album-grid" data-sortable="albums">
+          @foreach ($albums as $album)
+            <div class="sort-card album-tile" data-id="{{ $album->id }}">
+              <a href="{{ route('admin.albums.edit', $album) }}" class="album-cover no-drag" title="Open album">
+                <i class="bi bi-vinyl-fill"></i>
+                <span>{{ $album->tracks->count() }} {{ Str::plural('song', $album->tracks->count()) }}</span>
+              </a>
               <span class="no" data-no>{{ $loop->iteration }}</span>
-              <form method="POST" action="{{ route('admin.tracks.update', $track) }}" class="rename">
-                @csrf
-                @method('PUT')
-                <input name="title" class="input" value="{{ $track->title }}" aria-label="Song name" required>
-                <button class="btn btn-sm btn-icon" type="submit" title="Save name"><i class="bi bi-check2"></i></button>
-              </form>
-              <audio src="{{ media($track->file) }}" controls preload="none"></audio>
-              <div class="acts">
-                @include('admin.partials.delete', ['action' => route('admin.tracks.destroy', $track), 'confirm' => 'Delete the song "'.$track->title.'"?'])
+              <div class="cap">
+                <i class="bi bi-music-note-list text-primary"></i>
+                <div class="grow">
+                  <div class="truncate fw-semibold" title="{{ $album->title }}">{{ $album->title }}</div>
+                  <small class="truncate">{{ $album->tracks->count() }} {{ Str::plural('song', $album->tracks->count()) }}</small>
+                </div>
+                <a href="{{ route('admin.albums.edit', $album) }}" class="btn btn-sm btn-icon no-drag" title="Open album"><i class="bi bi-pencil"></i></a>
+                @include('admin.partials.delete', ['action' => route('admin.albums.destroy', $album), 'confirm' => 'Delete the album "'.$album->title.'" and all its songs?'])
               </div>
-            </li>
-          @empty
-            <li class="sort-row text-secondary"><i class="bi bi-info-circle"></i> No songs yet. Upload below.</li>
-          @endforelse
-        </ul>
-
-        <form method="POST" action="{{ route('admin.tracks.store', $album) }}" enctype="multipart/form-data" class="album-add" data-busy="Uploading…">
-          @csrf
-          <div class="row-fields">
-            <div class="field">
-              <label for="t_title_{{ $album->id }}">Song name</label>
-              <input id="t_title_{{ $album->id }}" name="title" class="input" placeholder="Leave empty to use the file name">
             </div>
-            <div class="field">
-              <label>Audio file</label>
-              @include('admin.partials.dropzone', ['name' => 'files', 'multiple' => true, 'accept' => 'audio/*,.mp3,.m4a,.wav,.ogg,.aac,.flac', 'title' => 'Drag MP3 files here or click', 'small' => true])
-            </div>
-            <button class="btn btn-primary" type="submit"><i class="bi bi-upload"></i>Upload song</button>
-          </div>
-        </form>
+          @endforeach
+        </div>
+        <div class="hint mt-3"><i class="bi bi-arrows-move"></i> Drag the cards to change the order. Click a card to open the album.</div>
       </div>
-    @endforeach
+    @endif
   </div>
 
   {{-- ================= Music videos ================= --}}

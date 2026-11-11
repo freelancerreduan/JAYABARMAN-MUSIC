@@ -155,3 +155,35 @@
   if (window.Turbo) document.addEventListener("turbo:load", init);
   else document.addEventListener("DOMContentLoaded", init);
 })();
+
+// ---------- Album page: one small play button per song (one song plays at a time) ----------
+(function () {
+  "use strict";
+  let audio = null;
+  let current = null;
+
+  function stop() {
+    if (audio) audio.pause();
+    if (current) {
+      current.classList.remove("playing");
+      current.querySelector("i").className = "bi bi-play-fill";
+    }
+    current = null;
+  }
+
+  document.addEventListener("click", (e) => {
+    const btn = e.target.closest(".song-play");
+    if (!btn) return;
+    if (btn === current) return stop();
+    stop();
+    audio = audio || new Audio();
+    audio.src = btn.dataset.song;
+    audio.play().catch(() => stop());
+    audio.onended = stop;
+    current = btn;
+    btn.classList.add("playing");
+    btn.querySelector("i").className = "bi bi-pause-fill";
+  });
+
+  document.addEventListener("turbo:before-visit", stop);
+})();
