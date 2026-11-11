@@ -10,15 +10,40 @@
         'youtube' => ['YouTube', setting('social_youtube')],
         'whatsapp' => ['WhatsApp', setting('social_whatsapp')],
     ];
+
+    // ---- SEO (set in admin › SEO) ----
+    $brand = setting('seo_title', 'Jaya Barman');
+    $metaDesc = trim((string) (View::getSection('meta_description') ?: setting('seo_description', 'Jaya Barman: musician, visual artist and actor. Music, visual art, theatre and portfolio.')));
+    $metaKeywords = (string) setting('seo_keywords');
+    $ogImage = setting('seo_image') ? media(setting('seo_image')) : asset('assets/img/hero.jpg');
+    $allowIndex = (string) setting('seo_index', '1') !== '0';
+    $pageTitle = trim((string) View::getSection('title'));
+    $fullTitle = ($pageTitle && $pageTitle !== $brand) ? $pageTitle.' | '.$brand : $brand;
+    $canonical = url()->current();
 @endphp
 <!doctype html>
 <html lang="en">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>@yield('title', 'Jaya Barman') | Jaya Barman</title>
-    <meta name="description" content="Jaya Barman: musician, visual artist and actor. Music, visual art, theatre and portfolio.">
+    <title>{{ $fullTitle }}</title>
+    <meta name="description" content="{{ $metaDesc }}">
+    @if ($metaKeywords)<meta name="keywords" content="{{ $metaKeywords }}">@endif
+    <meta name="robots" content="{{ $allowIndex ? 'index, follow' : 'noindex, nofollow' }}">
+    <link rel="canonical" href="{{ $canonical }}">
     <link rel="icon" href="{{ asset('assets/img/logo.svg') }}" type="image/svg+xml">
+
+    {{-- Open Graph / Twitter (link previews) --}}
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="{{ $brand }}">
+    <meta property="og:title" content="{{ $fullTitle }}">
+    <meta property="og:description" content="{{ $metaDesc }}">
+    <meta property="og:url" content="{{ $canonical }}">
+    <meta property="og:image" content="{{ $ogImage }}">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="{{ $fullTitle }}">
+    <meta name="twitter:description" content="{{ $metaDesc }}">
+    <meta name="twitter:image" content="{{ $ogImage }}">
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>

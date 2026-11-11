@@ -33,6 +33,12 @@ class DatabaseSeeder extends Seeder
 
         // Only fills settings that are not saved yet, so running the seeder again keeps the admin's changes
         Setting::putMissing([
+            // SEO
+            'seo_title' => 'Jaya Barman',
+            'seo_description' => 'Jaya Barman — musician, visual artist and actor. Explore music, visual art, theatre and portfolio.',
+            'seo_keywords' => 'Jaya Barman, Bengali music, Joler Gaan, visual art, theatre, actor, musician',
+            'seo_index' => '1',
+
             'hero_image' => 'assets/img/hero.jpg',
             'hero_name' => 'Jaya Barman',
             'hero_tagline' => '…spirit <b>U</b> all…',

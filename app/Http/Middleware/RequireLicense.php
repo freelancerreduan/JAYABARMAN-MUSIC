@@ -20,8 +20,8 @@ use Symfony\Component\HttpFoundation\Response;
  */
 class RequireLicense
 {
-    /** Machine-to-machine endpoints that must never be gated. */
-    private const PASS = ['license/push', 'up'];
+    /** Machine-to-machine and SEO endpoints that must never be gated. */
+    private const PASS = ['license/push', 'up', 'robots.txt', 'sitemap.xml'];
 
     public function handle(Request $request, Closure $next): Response
     {

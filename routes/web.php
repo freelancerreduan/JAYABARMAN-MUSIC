@@ -16,6 +16,10 @@ Route::controller(SiteController::class)->group(function () {
     Route::get('/contacts', 'contacts')->name('contacts');
 });
 
+// SEO files (served on any state; the license gate lets these through)
+Route::get('/robots.txt', [SiteController::class, 'robots']);
+Route::get('/sitemap.xml', [SiteController::class, 'sitemap']);
+
 // Old static .html links keep working
 foreach (['index' => '/', 'music' => '/music', 'visual-art' => '/visual-art', 'theatre' => '/theatre',
     'portfolio' => '/portfolio', 'about-me' => '/about-me', 'contacts' => '/contacts'] as $file => $to) {
@@ -41,6 +45,7 @@ Route::prefix('admin')->name('admin.')->middleware('auth')->group(function () {
         Route::put('contacts', 'saveContacts');
         Route::get('settings', 'settings')->name('settings');
         Route::put('settings', 'saveSettings');
+        Route::put('settings/seo', 'saveSeo')->name('seo');
         Route::put('settings/account', 'saveAccount')->name('account');
     });
 

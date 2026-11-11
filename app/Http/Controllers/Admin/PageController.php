@@ -70,6 +70,22 @@ class PageController extends Controller
         return back()->with('success', 'Footer links saved.');
     }
 
+    public function saveSeo(Request $request)
+    {
+        $data = $request->validate([
+            'seo_title' => 'nullable|string|max:70',
+            'seo_description' => 'nullable|string|max:200',
+            'seo_keywords' => 'nullable|string|max:255',
+            'seo_image_file' => 'nullable|image|max:5120',
+            'seo_index' => 'nullable|in:0,1',
+        ]);
+        $this->replaceImage($request, $data, 'seo_image', 'seo');
+        $data['seo_index'] = $request->input('seo_index', '1') === '0' ? '0' : '1';
+        Setting::put($data);
+
+        return back()->with('success', 'SEO settings saved.');
+    }
+
     public function saveAccount(Request $request)
     {
         $user = $request->user();

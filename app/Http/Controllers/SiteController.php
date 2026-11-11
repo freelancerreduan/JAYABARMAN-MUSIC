@@ -65,4 +65,44 @@ class SiteController extends Controller
     {
         return view('site.contacts');
     }
+
+    /** The public website pages, for robots.txt and sitemap.xml. */
+    private array $publicRoutes = ['home', 'music', 'visual-art', 'theatre', 'portfolio', 'about', 'contacts'];
+
+    /** Search engines allowed while "Let search engines show this website" is on in admin › SEO. */
+    private function indexingAllowed(): bool
+    {
+        try {
+            return (string) setting('seo_index', '1') !== '0';
+        } catch (\Throwable) {
+            return false;   // database not ready (e.g. before install): stay closed to crawlers
+        }
+    }
+
+    public function robots()
+    {
+        $lines = ['User-agent: *'];
+        if ($this->indexingAllowed()) {
+            $lines[] = 'Disallow: /admin';
+            $lines[] = 'Sitemap: '.url('/sitemap.xml');
+        } else {
+            $lines[] = 'Disallow: /';
+        }
+
+        return response(implode("\n", $lines)."\n", 200)->header('Content-Type', 'text/plain; charset=UTF-8');
+    }
+
+    public function sitemap()
+    {
+        $urls = '';
+        if ($this->indexingAllowed()) {
+            foreach ($this->publicRoutes as $name) {
+                $urls .= '  <url><loc>'.e(route($name)).'</loc><changefreq>weekly</changefreq></url>'."\n";
+            }
+        }
+        $xml = '<?xml version="1.0" encoding="UTF-8"?>'."\n"
+            .'<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">'."\n".$urls.'</urlset>'."\n";
+
+        return response($xml, 200)->header('Content-Type', 'application/xml; charset=UTF-8');
+    }
 }
